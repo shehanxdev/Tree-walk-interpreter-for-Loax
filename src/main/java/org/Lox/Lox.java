@@ -7,7 +7,10 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+
 public class Lox {
+
+    private static boolean hadError = false;
 
     public static void main(String[] args) throws IOException {
         if (args.length > 1) {
@@ -23,6 +26,8 @@ public class Lox {
     private static void runFile(String filePath) throws IOException {
         byte[] bytes = Files.readAllBytes(Paths.get(filePath));
         run(new String(bytes, Charset.defaultCharset()));
+        if (hadError)
+            System.exit(65);
     }
 
     private static void runPrompt() throws IOException {
@@ -31,14 +36,32 @@ public class Lox {
 
         for (; ; ) {
             System.out.print("> ");
+
             String line = bufferedReader.readLine();
+            System.out.println("in runPrompt");
             if (line == null)
                 break;
             run(line);
+            hadError = false;
         }
     }
 
     private static void run(String source) {
 
+
     }
+
+    //> lox-error
+    //Note: The reason where is always an empty string is in this book the author does not implement error handling to that level
+    static void error(int line, String message) {
+        report(line, "", message);
+    }
+
+    private static void report(int line, String where,
+                               String message) {
+        System.err.println(
+                "[line " + line + "] Error" + where + ": " + message);
+        hadError = true;
+    }
+//< lox-error
 }
