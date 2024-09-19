@@ -38,7 +38,7 @@ public class Lox {
             System.out.print("> ");
 
             String line = bufferedReader.readLine();
-            System.out.println("in runPrompt");
+
             if (line == null)
                 break;
             run(line);
