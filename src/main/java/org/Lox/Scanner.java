@@ -114,7 +114,12 @@ public class Scanner {
             default:
                 if (Character.isDigit(c)) {
                     checkForNumberAndAdd();
+                } else if (Character.isAlphabetic(c) || c == '_') {
+                    checkForIdentifierAndAdd();
+                } else {
+                    Lox.error(line, "Unexpected character.");
                 }
+                break;
 
         }
 
@@ -164,6 +169,7 @@ public class Scanner {
 
         // Trim the surrounding quotes.
         String value = source.substring(start + 1, current - 1);
+      
         addToken(TokenType.STRING, value);
     }
 
@@ -180,6 +186,18 @@ public class Scanner {
 
         addToken(TokenType.NUMBER,
                 Double.parseDouble(source.substring(start, current)));
+    }
+
+    private void checkForIdentifierAndAdd() {
+        while (isAlphaNumeric(peek())) advance();
+        String text = source.substring(start, current);
+        TokenType type = keywords.get(text);
+        if (type == null) type = TokenType.IDENTIFIER;
+        addToken(type);
+    }
+
+    private boolean isAlphaNumeric(char c) {
+        return Character.isAlphabetic(c) || Character.isDigit(c) || c == '_';
     }
 
     private char peek() {
