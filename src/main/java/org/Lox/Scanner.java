@@ -97,6 +97,16 @@ public class Scanner {
                 if (match('/')) {
                     // A comment goes until the end of the line.
                     while (peek() != '\n' && !isAtEnd()) advance();
+                } else if (match('*')) {
+
+                    while ((!match('*')) & !match('/')) {
+                        if (isAtEnd()) {
+                            Lox.error(line, "Unterminated comment");
+                            break;
+                        }
+                        advance();
+                    }
+
                 } else {
                     addToken(TokenType.SLASH);
                 }
@@ -169,7 +179,7 @@ public class Scanner {
 
         // Trim the surrounding quotes.
         String value = source.substring(start + 1, current - 1);
-      
+
         addToken(TokenType.STRING, value);
     }
 
