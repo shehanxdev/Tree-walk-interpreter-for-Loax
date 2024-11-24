@@ -5,6 +5,7 @@ import org.common.enums.ExitCodes;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.List;
 
 public class GenerateAst {
@@ -14,6 +15,18 @@ public class GenerateAst {
             System.exit(ExitCodes.INVALID_USAGE.getCode());
         }
         String outputDirectory = args[0];
+        try {
+            System.out.println("Printing.....");
+            System.out.println("Printing.....");
+            defineAst(outputDirectory, "Expr", Arrays.asList(
+                    "Binary   : Expr left, Token operator, Expr right",
+                    "Grouping : Expr expression",
+                    "Literal  : Object value",
+                    "Unary    : Token operator, Expr right"
+            ));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     private static void defineAst(
